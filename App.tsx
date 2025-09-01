@@ -135,10 +135,43 @@ const fonts = [
 
 // --- Music Definitions ---
 const musicTracks = [
-    'https://music-to-relax.stream.laut.fm/music-to-relax', // Relaxing
-    'http://live7.avf.ch:8000/ipmusicslow320', // Lofi
-    'http://s6.voscast.com:10108', // Ambient
-    'https://radio.tvstitch.com/RadioRelax_Int', // Calm
+     {  
+        'title': 'Music To Relax',
+        'url': 'https://music-to-relax.stream.laut.fm/music-to-relax', // Relaxing
+     },
+     {
+        'title':'Radio Relax International',
+        'url':'https://radio.tvstitch.com/RadioRelax_Int'
+     },
+     {
+        'title':'EPIC CLASSICAL - Classical Restaurant Music',
+        'url': 'https://stream.epic-classical.com/classical-restaurant-music'
+     },
+     {
+        'title': 'EPIC CLASSICAL - Classical Relax',
+        'url': 'https://stream.epic-classical.com/classical-relax'
+     },
+     {
+        'title': 'Beautiful Music 101',
+        'url': 'https://radio.streemlion.com:1665/stream'
+     },
+     {
+        'title': 'Soundstorm - Relax Radio',
+        'url': 'http://stream.soundstorm-radio.com/radio/8000/radio.mp3'
+     },
+     {  
+        'title': 'VOA English',
+        'url': 'http://voa-28.akacast.akamaistream.net/7/54/322040/v1/ibb.akacast.akamaistream.net/voa-28.m3u'
+     },
+     {
+        'title':'Podcast Radio',
+        'url': 'https://podcastradio.cdnstream1.com/world'
+     },
+     {
+        'title':'Podcast Radio Business',
+        'url': 'https://ais-sa8.cdnstream1.com/2747_192.mp3'
+     }
+    
 ];
 
 // --- Helper Components (Defined outside App to prevent re-creation on re-renders) ---
@@ -221,8 +254,8 @@ const App: React.FC = () => {
         if (!audio) return;
 
         // Programmatically update src and load when track changes
-        if (audio.src !== currentTrack) {
-            audio.src = currentTrack;
+        if (audio.src !== currentTrack.url) {
+            audio.src = currentTrack.url;
             audio.load();
         }
 
@@ -343,6 +376,24 @@ const App: React.FC = () => {
                             </svg>
                        )}
                     </button>
+                    {
+                        isPlaying && (
+                            <button
+                                onClick={handleTrackEnd}
+                                className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2 flex items-center justify-center"
+                                style={buttonStyle}
+                                aria-label={isPlaying ? "Pause music" : "Play music"}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="16 3 21 3 21 8"></polyline>
+                                    <line x1="4" y1="20" x2="21" y2="3"></line>
+                                    <polyline points="16 17 21 17 21 22"></polyline>
+                                    <line x1="4" y1="4" x2="11" y2="11"></line>
+                                </svg>
+                            </button>
+                        )
+
+                    }
                 </div>
                 
                 <div className="relative z-10 flex flex-col items-center">
@@ -351,6 +402,9 @@ const App: React.FC = () => {
                 </div>
                 <div className="text-center text-xs mt-4 tracking-widest uppercase" style={{ color: currentTheme.dateColor, opacity: 0.7 }}>
                     {currentTheme.name} / {currentFont.name}
+                </div>
+                <div className="text-center text-xs mt-4 tracking-widest uppercase" style={{ color: currentTheme.dateColor, opacity: 0.7 }}>
+                    {currentTrack.title}
                 </div>
             </div>
             
