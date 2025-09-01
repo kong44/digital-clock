@@ -294,7 +294,7 @@ const App: React.FC = () => {
     return (
         <main className={`min-h-screen flex flex-col items-center justify-center p-4 select-none antialiased ${currentFont.className}`}>
             <div 
-                className="relative backdrop-blur-sm p-6 sm:p-10 rounded-2xl shadow-2xl border w-full max-w-5xl transition-colors duration-500"
+                className="relative backdrop-blur-sm p-20 rounded-2xl shadow-2xl border w-full max-w-5xl transition-colors duration-500"
                 style={{
                     backgroundColor: currentTheme.clockBackground,
                     borderColor: currentTheme.borderColor
