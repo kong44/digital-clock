@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classic Digital Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bitcount+Prop+Single:wght@100..900&family=Bungee&family=Concert+One&family=Viga&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              bungee: ['Bungee', 'sans-serif'],
+              audiowide: ['Audiowide', 'sans-serif'],
+              bitcount: ['"Bitcount Prop Single"', 'sans-serif'],
+              'concert-one': ['"Concert One"', 'sans-serif'],
+              viga: ['Viga', 'sans-serif'],
+            },
+            animation: {
+              tick: 'tick-kf 1s ease-in-out',
+            },
+            keyframes: {
+              'tick-kf': {
+                '50%': { opacity: 0.6 },
+                '0%, 100%': { opacity: 1 },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://aistudiocdn.com/react@^19.1.1",
+          "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+          "react/": "https://aistudiocdn.com/react@^19.1.1/"
+        }
+      }
+    </script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

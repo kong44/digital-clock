@@ -1,0 +1,5 @@
+{
+  "name": "Classic Digital Clock",
+  "description": "A digital clock with a classic, dark, and glowing design, built with React and Tailwind CSS. It displays the current time and date, updated every second.",
+  "requestFramePermissions": []
+}
