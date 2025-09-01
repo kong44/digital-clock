@@ -135,10 +135,10 @@ const fonts = [
 
 // --- Music Definitions ---
 const musicTracks = [
-    'https://cdn.pixabay.com/audio/2022/11/17/audio_874b33b3a3.mp3', // Relaxing
-    'https://cdn.pixabay.com/audio/2024/05/20/audio_21a08c02b2.mp3', // Lofi
-    'https://cdn.pixabay.com/audio/2023/04/05/audio_18fd8919a0.mp3', // Ambient
-    'https://cdn.pixabay.com/audio/2022/08/03/audio_51cf085b37.mp3', // Calm
+    'https://music-to-relax.stream.laut.fm/music-to-relax', // Relaxing
+    'http://live7.avf.ch:8000/ipmusicslow320', // Lofi
+    'http://s6.voscast.com:10108', // Ambient
+    'https://radio.tvstitch.com/RadioRelax_Int', // Calm
 ];
 
 // --- Helper Components (Defined outside App to prevent re-creation on re-renders) ---
