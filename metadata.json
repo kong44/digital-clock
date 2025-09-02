@@ -1,5 +1,5 @@
 {
   "name": "Classic Digital Clock",
-  "description": "A digital clock with a classic, dark, and glowing design, built with React and Tailwind CSS. It displays the current time and date, updated every second.",
+  "description": "A stylish, customizable digital clock with multiple themes, fonts, and background music streaming. Features include 12/24 hour format, fullscreen mode, and a variety of ambient radio stations.",
   "requestFramePermissions": []
 }
