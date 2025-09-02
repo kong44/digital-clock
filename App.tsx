@@ -177,7 +177,7 @@ const musicTracks = [
      },
      {
         'title':'Daun Penh EFM',
-        'url': 'http://36.37.219.226:9051/dpnefmpp'
+        'url': 'http://203.189.159.204:9051/dpnefmpp'
      },
      {
         'title':'RFI Anglais',
@@ -198,6 +198,18 @@ const musicTracks = [
      {
         'title':'Old Time Radio USA',
         'url': 'https://fwd.autopo.st/otrusa'
+     },
+     {
+        'title':'AM 918 FM 90.5 94 98.5 rnk.gov.kh RNK Radio National Kampuchea',
+        'url': 'http://119.82.252.6:8080/broadwave.mp3'
+     },
+     {
+        'title':'Vayo FM',
+        'url': 'http://50.21.176.38:8010/vayofm/;'
+     },
+     {
+        'title':'RNK FM ',
+        'url': 'http://119.82.252.6:8181/broadwave.mp3'
      },
 ];
 
