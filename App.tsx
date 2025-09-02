@@ -170,8 +170,35 @@ const musicTracks = [
      {
         'title':'Podcast Radio Business',
         'url': 'https://ais-sa8.cdnstream1.com/2747_192.mp3'
-     }
-    
+     },
+     {
+        'title':'Radio Samleng Khemara',
+        'url': 'http://radio.khemaranet.com:7580/'
+     },
+     {
+        'title':'Daun Penh EFM',
+        'url': 'http://36.37.219.226:9051/dpnefmpp'
+     },
+     {
+        'title':'RFI Anglais',
+        'url': 'https://rfianglais96k.ice.infomaniak.ch/rfianglais-96k.mp3'
+     },
+     {
+        'title':'Quran in English',
+        'url': 'http://quraan.us:9990'
+     },
+     {
+        'title':'Open Radio Usa',
+        'url': 'https://stream.zeno.fm/20catahb6d4uv'
+     },
+     {
+        'title':'Radio USA',
+        'url': 'https://playerservices.streamtheworld.com/api/livestream-redirect/WUSZFM.mp3'
+     },
+     {
+        'title':'Old Time Radio USA',
+        'url': 'https://fwd.autopo.st/otrusa'
+     },
 ];
 
 // --- Helper Components (Defined outside App to prevent re-creation on re-renders) ---
