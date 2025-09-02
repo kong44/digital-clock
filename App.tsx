@@ -221,7 +221,7 @@ const DateDisplay: React.FC<DateDisplayProps> = ({ fullDate, theme }) => (
 
 const App: React.FC = () => {
     const [date, setDate] = useState(new Date());
-    const [is24Hour, setIs24Hour] = useState(true);
+    const [is24Hour, setIs24Hour] = useState(false);
     const [themeIndex, setThemeIndex] = useState(0);
     const [fontIndex, setFontIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
