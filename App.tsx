@@ -225,12 +225,13 @@ const App: React.FC = () => {
     const [themeIndex, setThemeIndex] = useState(0);
     const [fontIndex, setFontIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isMaximize, setIsMaximize] = useState(false);
     const [currentTrack, setCurrentTrack] = useState(() => musicTracks[Math.floor(Math.random() * musicTracks.length)]);
     const audioRef = useRef<HTMLAudioElement>(null);
-
+    const windowRef = useRef<HTMLDivElement>(null);
     const currentTheme = themes[themeIndex];
     const currentFont = fonts[fontIndex];
-
+    
     useEffect(() => {
         document.body.style.backgroundColor = currentTheme.background;
         document.body.style.transition = 'background-color 0.5s ease';
@@ -294,6 +295,53 @@ const App: React.FC = () => {
         } while (musicTracks.length > 1 && newTrack === currentTrack);
         setCurrentTrack(newTrack);
     };
+    
+    const handleMaximizeToggle = () => {
+      if (!windowRef.current) {
+        return;
+      }
+      if (!document.fullscreenElement) {
+        windowRef.current.requestFullscreen().catch((err) => {
+          alert(
+            `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
+          );
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    };
+
+    useEffect(() => {
+        const onFullscreenChange = () => {
+        setIsMaximize(!!document.fullscreenElement);
+        };
+
+        document.addEventListener('fullscreenchange', onFullscreenChange);
+
+        return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+    }, []);
+
+    useEffect(() => {
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+      function ctrlShiftKey(e, keyCode) {
+        return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+      }
+
+      document.onkeydown = (e) => {
+        // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+        if (
+          e.keyCode === 123 ||
+          ctrlShiftKey(e, "I") ||
+          ctrlShiftKey(e, "J") ||
+          ctrlShiftKey(e, "C") ||
+          (e.ctrlKey && e.keyCode === "U".charCodeAt(0))
+        )
+          return false;
+      };
+    }, []);
 
     const hoursRaw = date.getHours();
     const minutes = String(date.getMinutes()).padStart(2, '0');
@@ -325,93 +373,171 @@ const App: React.FC = () => {
     };
 
     return (
-        <main className={`min-h-screen flex flex-col items-center justify-center p-4 select-none antialiased ${currentFont.className}`}>
-            <div 
-                className="relative backdrop-blur-sm p-20 rounded-2xl shadow-2xl border w-full max-w-5xl transition-colors duration-500"
-                style={{
-                    backgroundColor: currentTheme.clockBackground,
-                    borderColor: currentTheme.borderColor
-                }}
-            >
-                <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent rounded-t-2xl pointer-events-none"></div>
-                
-                 <div className="absolute top-3 right-3 z-20 flex gap-2">
-                    <button
-                        onClick={() => setIs24Hour(!is24Hour)}
-                        className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2"
-                        style={buttonStyle}
-                        aria-label={`Switch to ${is24Hour ? '12-hour' : '24-hour'} format`}
-                    >
-                        {is24Hour ? '12H' : '24H'}
-                    </button>
-                    <button
-                        onClick={handleThemeChange}
-                        className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2"
-                        style={buttonStyle}
-                        aria-label="Change theme"
-                    >
-                        Theme
-                    </button>
-                    <button
-                        onClick={handleFontChange}
-                        className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2"
-                        style={buttonStyle}
-                        aria-label="Change font"
-                    >
-                        Font
-                    </button>
-                    <button
-                        onClick={handleMusicToggle}
-                        className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2 flex items-center justify-center"
-                        style={buttonStyle}
-                        aria-label={isPlaying ? "Pause music" : "Play music"}
-                    >
-                       {isPlaying ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v4a1 1 0 11-2 0V8z" clipRule="evenodd" />
-                            </svg>
-                       ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V3z" />
-                            </svg>
-                       )}
-                    </button>
-                    <button
-                        onClick={handleTrackEnd}
-                        className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2 flex items-center justify-center"
-                        style={buttonStyle}
-                        aria-label="switch channel"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="16 3 21 3 21 8"></polyline>
-                            <line x1="4" y1="20" x2="21" y2="3"></line>
-                            <polyline points="16 17 21 17 21 22"></polyline>
-                            <line x1="4" y1="4" x2="11" y2="11"></line>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div className="relative z-10 flex flex-col items-center">
-                    <TimeDisplay hours={hours} minutes={minutes} seconds={seconds} ampm={ampm} theme={currentTheme} />
-                    <DateDisplay fullDate={fullDate} theme={currentTheme} />
-                </div>
-                <div className="text-center text-xs mt-4 tracking-widest uppercase" style={{ color: currentTheme.dateColor, opacity: 0.7 }}>
-                    {currentTheme.name} / {currentFont.name}
-                </div>
-                <div className="text-center text-xs mt-4 tracking-widest uppercase" style={{ color: currentTheme.dateColor, opacity: 0.7 }}>
-                    {currentTrack.title}
-                </div>
-            </div>
-            
-            <footer className="absolute bottom-4 text-center text-gray-600 text-sm transition-opacity hover:opacity-100 opacity-50">
-                <p>Classic Digital Clock</p>
-            </footer>
+      <main
+        ref={windowRef}
+        className={`min-h-screen flex flex-col items-center justify-center p-4 select-none antialiased ${currentFont.className}`}
+      >
+        <div
+          className="relative backdrop-blur-sm p-20 rounded-2xl shadow-2xl border w-full max-w-5xl transition-colors duration-500"
+          style={{
+            backgroundColor: currentTheme.clockBackground,
+            borderColor: currentTheme.borderColor,
+          }}
+        >
+          <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent rounded-t-2xl pointer-events-none"></div>
 
-            <audio 
-                ref={audioRef} 
-                onEnded={handleTrackEnd}
+          <div className="absolute top-3 right-3 z-20 flex gap-2">
+            <button
+              onClick={() => setIs24Hour(!is24Hour)}
+              className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2"
+              style={buttonStyle}
+              aria-label={`Switch to ${
+                is24Hour ? "12-hour" : "24-hour"
+              } format`}
+            >
+              {is24Hour ? "12H" : "24H"}
+            </button>
+            <button
+              onClick={handleThemeChange}
+              className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2"
+              style={buttonStyle}
+              aria-label="Change theme"
+            >
+              Theme
+            </button>
+            <button
+              onClick={handleFontChange}
+              className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2"
+              style={buttonStyle}
+              aria-label="Change font"
+            >
+              Font
+            </button>
+            <button
+              onClick={handleMusicToggle}
+              className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2 flex items-center justify-center"
+              style={buttonStyle}
+              aria-label={isPlaying ? "Pause music" : "Play music"}
+            >
+              {isPlaying ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v4a1 1 0 11-2 0V8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V3z" />
+                </svg>
+              )}
+            </button>
+            <button
+              onClick={handleTrackEnd}
+              className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2 flex items-center justify-center"
+              style={buttonStyle}
+              aria-label="switch channel"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="16 3 21 3 21 8"></polyline>
+                <line x1="4" y1="20" x2="21" y2="3"></line>
+                <polyline points="16 17 21 17 21 22"></polyline>
+                <line x1="4" y1="4" x2="11" y2="11"></line>
+              </svg>
+            </button>
+
+            <button
+              onClick={handleMaximizeToggle}
+              className="text-xs sm:text-sm font-semibold py-1 px-3 rounded-full border hover:bg-gray-700/50 transition-all focus:outline-none focus:ring-2 flex items-center justify-center"
+              style={buttonStyle}
+              aria-label={isMaximize ? "Minimize" : "Maximize"}
+            >
+              {isMaximize ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                >
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+                  <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                  <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+                  <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                >
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                </svg>
+              )}
+            </button>
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center">
+            <TimeDisplay
+              hours={hours}
+              minutes={minutes}
+              seconds={seconds}
+              ampm={ampm}
+              theme={currentTheme}
             />
-        </main>
+            <DateDisplay fullDate={fullDate} theme={currentTheme} />
+          </div>
+          <div
+            className="text-center text-xs mt-4 tracking-widest uppercase"
+            style={{ color: currentTheme.dateColor, opacity: 0.7 }}
+          >
+            {currentTheme.name} / {currentFont.name}
+          </div>
+          <div
+            className="text-center text-xs mt-4 tracking-widest uppercase"
+            style={{ color: currentTheme.dateColor, opacity: 0.7 }}
+          >
+            {currentTrack.title}
+          </div>
+        </div>
+
+        <footer className="absolute bottom-4 text-center text-gray-600 text-sm transition-opacity hover:opacity-100 opacity-50">
+          <p>Classic Digital Clock</p>
+        </footer>
+
+        <audio ref={audioRef} onEnded={handleTrackEnd} />
+      </main>
     );
 };
 
