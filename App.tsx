@@ -362,25 +362,25 @@ const App: React.FC = () => {
         return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
     }, []);
 
-    useEffect(() => {
-      document.addEventListener("contextmenu", (e) => e.preventDefault());
+    // useEffect(() => {
+    //   document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-      function ctrlShiftKey(e, keyCode) {
-        return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
-      }
+    //   function ctrlShiftKey(e, keyCode) {
+    //     return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+    //   }
 
-      document.onkeydown = (e) => {
-        // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
-        if (
-          e.keyCode === 123 ||
-          ctrlShiftKey(e, "I") ||
-          ctrlShiftKey(e, "J") ||
-          ctrlShiftKey(e, "C") ||
-          (e.ctrlKey && e.keyCode === "U".charCodeAt(0))
-        )
-          return false;
-      };
-    }, []);
+    //   document.onkeydown = (e) => {
+    //     // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+    //     if (
+    //       e.keyCode === 123 ||
+    //       ctrlShiftKey(e, "I") ||
+    //       ctrlShiftKey(e, "J") ||
+    //       ctrlShiftKey(e, "C") ||
+    //       (e.ctrlKey && e.keyCode === "U".charCodeAt(0))
+    //     )
+    //       return false;
+    //   };
+    // }, []);
 
     const hoursRaw = date.getHours();
     const minutes = String(date.getMinutes()).padStart(2, '0');
